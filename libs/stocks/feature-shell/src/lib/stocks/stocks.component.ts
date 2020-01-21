@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
 import { TimePeriod } from './time-period.type';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -10,7 +11,7 @@ import { TimePeriod } from './time-period.type';
 })
 export class StocksComponent implements OnInit {
   private stockPickerForm: FormGroup;
-  public quotes$ = this.priceQuery.priceQueries$;
+  public quotes$: Observable<(string | number)[][]> = this.priceQuery.priceQueries$;
 
   public readonly timePeriods: TimePeriod[] = [
     { viewValue: 'All available data', value: 'max' },
