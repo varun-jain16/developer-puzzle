@@ -13,16 +13,17 @@ import { Observable } from 'rxjs';
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements OnInit {
-  @Input() data$: Observable<any>;
-  chartData: any;
+  @Input() public data$: Observable<any>;
+  public chartData: any;
 
-  chart: {
+  public chart: {
     title: string;
     type: string;
     data: any;
     columnNames: string[];
     options: any;
   };
+  
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {

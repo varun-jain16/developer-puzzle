@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
@@ -17,6 +17,6 @@ import {
     StoreModule.forFeature(PRICEQUERY_FEATURE_KEY, priceQueryReducer),
     EffectsModule.forFeature([PriceQueryEffects])
   ],
-  providers: [PriceQueryFacade]
+  providers: [PriceQueryFacade, DatePipe]
 })
 export class StocksDataAccessPriceQueryModule {}
