@@ -18,17 +18,6 @@ export class StocksComponent implements OnInit, OnDestroy {
   public maxDateTo: Date = new Date();
   private stockPickerFormSubscription: Subscription;
 
-  timePeriods = [
-    { viewValue: 'All available data', value: 'max' },
-    { viewValue: 'Five years', value: '5y' },
-    { viewValue: 'Two years', value: '2y' },
-    { viewValue: 'One year', value: '1y' },
-    { viewValue: 'Year-to-date', value: 'ytd' },
-    { viewValue: 'Six months', value: '6m' },
-    { viewValue: 'Three months', value: '3m' },
-    { viewValue: 'One month', value: '1m' }
-  ];
-
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
@@ -37,7 +26,7 @@ export class StocksComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.stockPickerFormSubscription = this.stockPickerForm.get('periodFrom').valueChanges
       .subscribe((periodFromValue) => {
         if (periodFromValue) {
@@ -52,14 +41,14 @@ export class StocksComponent implements OnInit, OnDestroy {
       });
   }
 
-  fetchQuote() {
+  public fetchQuote(): void {
     if (this.stockPickerForm.valid) {
       const { symbol, periodFrom, periodTo } = this.stockPickerForm.value;
       this.priceQuery.fetchQuote(symbol, { start: periodFrom, end: periodTo });
     }
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.stockPickerFormSubscription.unsubscribe();
   }
 }
