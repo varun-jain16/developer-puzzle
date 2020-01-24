@@ -6,8 +6,8 @@ import {
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeWhile, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'coding-challenge-chart',
@@ -27,12 +27,11 @@ export class ChartComponent implements OnInit, OnDestroy {
     options: any;
   };
 
-  private isComponentActive: boolean;
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private cd: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
-    this.isComponentActive = true;
     this.chart = {
       title: '',
       type: 'LineChart',
@@ -42,7 +41,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     };
 
     this.data$
-      .pipe(takeWhile(() => this.isComponentActive))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(newData => {
         this.chartData = newData;
         this.cd.detectChanges();
@@ -50,6 +49,7 @@ export class ChartComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.isComponentActive = false;
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

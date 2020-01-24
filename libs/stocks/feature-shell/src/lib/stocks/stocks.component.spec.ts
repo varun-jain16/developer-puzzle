@@ -55,7 +55,6 @@ describe('StocksComponent', () => {
 
   it('fetch quote on value changes when form is valid', fakeAsync(() => {
     spyOn(priceQueryFacade, 'fetchQuote').and.stub();
-    component['isComponentActive'] = true;
     component.stockPickerForm.controls['symbol'].setValue('test');
     component.stockPickerForm.controls['period'].setValue('1m');
     tick(1000);
@@ -65,7 +64,6 @@ describe('StocksComponent', () => {
 
   it('fetch quote on value changes when form is invalid', fakeAsync(() => {
     spyOn(priceQueryFacade, 'fetchQuote').and.stub();
-    component['isComponentActive'] = true;
     component.stockPickerForm.controls['symbol'].setValue('test');
     tick(1000);
     expect(priceQueryFacade.fetchQuote).not.toHaveBeenCalled();
