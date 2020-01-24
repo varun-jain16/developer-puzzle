@@ -4,7 +4,7 @@ import { ChartComponent } from './chart.component';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { of } from 'rxjs';
 
-fdescribe('ChartComponent', () => {
+describe('ChartComponent', () => {
   let component: ChartComponent;
   let fixture: ComponentFixture<ChartComponent>;
 
