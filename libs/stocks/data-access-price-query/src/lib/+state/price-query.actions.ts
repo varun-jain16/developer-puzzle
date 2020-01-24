@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { PriceQueryResponse } from './price-query.type';
+import { PriceQueryResponse, PriceRange } from './price-query.type';
 
 export enum PriceQueryActionTypes {
   SelectSymbol = 'priceQuery.selectSymbol',
@@ -10,7 +10,7 @@ export enum PriceQueryActionTypes {
 
 export class FetchPriceQuery implements Action {
   readonly type = PriceQueryActionTypes.FetchPriceQuery;
-  constructor(public symbol: string, public period: string) {}
+  constructor(public symbol: string, public period: string, public dateRange: PriceRange) {}
 }
 
 export class PriceQueryFetchError implements Action {

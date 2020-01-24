@@ -13,17 +13,12 @@ export class PriceQueryFacade {
   public priceQueries$ = this.store.pipe(
     select(getAllPriceQueries),
     skip(1),
-    map(priceQueries => priceQueries.filter((priceQuery) => {
-      const minDate = this.datePipe.transform(this.dateRange.start, 'yyyy-MM-dd');
-      const maxDate = this.datePipe.transform(this.dateRange.end, 'yyyy-MM-dd');
-      const resDate = this.datePipe.transform(priceQuery.date, 'yyyy-MM-dd');
-      return (resDate >= minDate && resDate <= maxDate);
-    }).map(priceQuery => [priceQuery.date, priceQuery.close])
-    ));
+    map(priceQueries =>
+      priceQueries.map(priceQuery => [priceQuery.date, priceQuery.close])
+    )
+  );
 
-  private dateRange: PriceRange = { start: '', end: '' };
-
-  constructor(private store: Store<PriceQueryPartialState>, private datePipe: DatePipe) { }
+  constructor(private store: Store<PriceQueryPartialState>) { }
 
   public fetchQuote(symbol: string, dateRange: PriceRange): void {
     /**
@@ -70,7 +65,6 @@ export class PriceQueryFacade {
           period = 'max';
       }
     }
-    this.dateRange = dateRange;
-    this.store.dispatch(new FetchPriceQuery(symbol, period));
+    this.store.dispatch(new FetchPriceQuery(symbol, period, dateRange));
   }
 }

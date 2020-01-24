@@ -6,15 +6,17 @@ import {
 } from '@coding-challenge/stocks/data-access-app-config';
 import { Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import {
   FetchPriceQuery,
   PriceQueryActionTypes,
   PriceQueryFetched,
-  PriceQueryFetchError
+  PriceQueryFetchError,
+  SelectSymbol
 } from './price-query.actions';
 import { PriceQueryPartialState } from './price-query.reducer';
 import { PriceQueryResponse } from './price-query.type';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class PriceQueryEffects {
@@ -25,12 +27,22 @@ export class PriceQueryEffects {
         return this.httpClient
           .get(
             `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
-              action.period
+            action.period
             }?token=${this.env.apiKey}`
           )
           .pipe(
-            map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
-          );
+            map((resp: PriceQueryResponse[]) => resp.filter((priceQuery) => {
+              const minDate = this.datePipe.transform(action.dateRange.start, 'yyyy-MM-dd');
+              const maxDate = this.datePipe.transform(action.dateRange.end, 'yyyy-MM-dd');
+              const resDate = this.datePipe.transform(priceQuery.date, 'yyyy-MM-dd');
+              return (resDate >= minDate && resDate <= maxDate);
+            })), switchMap(resp => {
+              return [
+                new PriceQueryFetched(resp as PriceQueryResponse[]),
+                new SelectSymbol(action.symbol)
+              ];
+            })
+          )
       },
 
       onError: (action: FetchPriceQuery, error) => {
@@ -42,6 +54,7 @@ export class PriceQueryEffects {
   constructor(
     @Inject(StocksAppConfigToken) private env: StocksAppConfig,
     private httpClient: HttpClient,
-    private dataPersistence: DataPersistence<PriceQueryPartialState>
-  ) {}
+    private dataPersistence: DataPersistence<PriceQueryPartialState>,
+    private datePipe: DatePipe
+  ) { }
 }
