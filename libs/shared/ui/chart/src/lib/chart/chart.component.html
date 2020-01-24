@@ -1,5 +1,5 @@
 <google-chart
-  *ngIf="data"
+  *ngIf="chartData?.length"
   [title]="chart.title"
   [type]="chart.type"
   [data]="chartData"
@@ -7,3 +7,6 @@
   [options]="chart.options"
 >
 </google-chart>
+<span *ngIf="chartData?.length === 0">
+  No data available for the current selection.
+</span>
