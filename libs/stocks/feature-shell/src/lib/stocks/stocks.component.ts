@@ -17,7 +17,7 @@ export class StocksComponent implements OnInit, OnDestroy {
 
   public quotes$: Observable<(string | number)[][]> = this.priceQuery.priceQueries$;
 
-  public timePeriods: Readonly<ITimePeriods[]> = TIME_PERIODS;
+  public readonly timePeriods: Readonly<ITimePeriods[]> = TIME_PERIODS;
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
