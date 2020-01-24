@@ -17,11 +17,7 @@ export class PriceQueryFacade {
       const minDate = this.datePipe.transform(this.dateRange.start, 'yyyy-MM-dd');
       const maxDate = this.datePipe.transform(this.dateRange.end, 'yyyy-MM-dd');
       const resDate = this.datePipe.transform(priceQuery.date, 'yyyy-MM-dd');
-      if (resDate >= minDate && resDate <= maxDate) {
-        return true;
-      } else {
-        return false;
-      }
+      return (resDate >= minDate && resDate <= maxDate);
     }).map(priceQuery => [priceQuery.date, priceQuery.close])
     ));
 
